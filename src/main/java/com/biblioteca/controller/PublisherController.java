@@ -1,5 +1,16 @@
 package com.biblioteca.controller;
 
-public class PublisherController {
+import com.biblioteca.model.Publisher;
+import com.biblioteca.repository.PublisherRepository;
 
+public class PublisherController {
+    private final PublisherRepository publisherRepository;
+
+    public PublisherController(PublisherRepository publisherRepository){
+        this.publisherRepository=publisherRepository;
+    }
+
+    public void addPublisher(Publisher publisher){
+        publisherRepository.addPublisher(publisher);
+    }
 }
