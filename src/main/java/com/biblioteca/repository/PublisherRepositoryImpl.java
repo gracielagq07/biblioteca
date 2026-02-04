@@ -2,6 +2,7 @@ package com.biblioteca.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import com.biblioteca.config.DBManager;
 import com.biblioteca.model.Publisher;
@@ -17,8 +18,8 @@ public class PublisherRepositoryImpl implements PublisherRepository{
             PreparedStatement st = connection.prepareStatement(sql);
         ){
             st.setString(1, publisher.getName());
-            
-        } catch (Exception e) {
+            st.executeUpdate();
+        } catch (SQLException e) {
             throw new RuntimeException("Error al añadir la editorial" + e.getMessage());
         }
     }
