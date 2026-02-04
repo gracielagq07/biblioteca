@@ -1,12 +1,11 @@
 package com.biblioteca;
-
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.biblioteca.config.DBManager;
+import com.biblioteca.controller.AuthorController;
 import com.biblioteca.controller.BookController;
-import com.biblioteca.model.Book;
+import com.biblioteca.repository.AuthorRepositoryImpl;
 import com.biblioteca.repository.BookRepositoryImpl;
+import com.biblioteca.view.AuthorView;
 import com.biblioteca.view.BookView;
 
 /**
@@ -22,7 +21,11 @@ public class App
             BookRepositoryImpl repo= new BookRepositoryImpl();
             BookController bookController= new BookController(repo);
             BookView bookView= new BookView(bookController);
+            AuthorRepositoryImpl authorRepo=new AuthorRepositoryImpl();
+            AuthorController authorController=new AuthorController(authorRepo);
+            AuthorView authorView=new AuthorView(authorController);
             bookView.addBook(scanner);
+            authorView.addAuthor(scanner);
         } catch (Exception e) {
            System.err.println(e.getMessage());
         }finally{
