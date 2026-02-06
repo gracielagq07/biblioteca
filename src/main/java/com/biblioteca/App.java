@@ -1,54 +1,35 @@
 package com.biblioteca;
-import java.util.Scanner;
 
-import com.biblioteca.controller.AuthorController;
-import com.biblioteca.controller.BookController;
-import com.biblioteca.controller.GenreController;
-import com.biblioteca.controller.PublisherController;
-import com.biblioteca.repository.AuthorRepositoryImpl;
-import com.biblioteca.repository.BookRepositoryImpl;
-import com.biblioteca.repository.GenreRepositoryImpl;
-import com.biblioteca.repository.PublisherRepositoryImpl;
-import com.biblioteca.view.AuthorView;
-import com.biblioteca.view.BookView;
-import com.biblioteca.view.GenreView;
-import com.biblioteca.view.PublisherView;
+import com.biblioteca.controller.*;
+import com.biblioteca.repository.*;
+import com.biblioteca.view.*;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        Scanner scanner=new Scanner(System.in);
-        try {
-            BookRepositoryImpl repo= new BookRepositoryImpl();
-            BookController bookController= new BookController(repo);
-            BookView bookView= new BookView(bookController);
-            
-            AuthorRepositoryImpl authorRepo=new AuthorRepositoryImpl();
-            AuthorController authorController=new AuthorController(authorRepo);
-            AuthorView authorView=new AuthorView(authorController);
-            
-            PublisherRepositoryImpl pubRepo=new PublisherRepositoryImpl();
-            PublisherController publisherController=new PublisherController(pubRepo);
-            PublisherView publisherView=new PublisherView(publisherController);
+public class App {
+    public static void main(String[] args) {
 
-            GenreRepositoryImpl GenRepo=new GenreRepositoryImpl();
-            GenreController genreController=new GenreController(GenRepo);
-            GenreView genreView=new GenreView(genreController);
+        BookRepositoryImpl bookRepo = new BookRepositoryImpl();
+        AuthorRepositoryImpl authorRepo = new AuthorRepositoryImpl();
+        PublisherRepositoryImpl publisherRepo = new PublisherRepositoryImpl();
+        GenreRepositoryImpl genreRepo = new GenreRepositoryImpl();
 
-            bookView.addBook(scanner);
-            authorView.addAuthor(scanner);
-            publisherView.addPublisher(scanner);
-            genreView.addGenre(scanner);
-        } catch (Exception e) {
-           System.err.println(e.getMessage());
-        }finally{
-            scanner.close();
-        }
-       
+        BookMenuView bookMenuView = new BookMenuView();
+        BookView bookView = new BookView();
+        AuthorMenuView authorView = new AuthorMenuView();
+        PublisherMenuView publisherView = new PublisherMenuView();
+        GenreMenuView genreView = new GenreMenuView();
+
+        BookController bookController = new BookController(bookRepo, bookMenuView, bookView);
+        AuthorController authorController = new AuthorController(authorRepo, authorView);
+        PublisherController publisherController = new PublisherController(publisherRepo, publisherView);
+        GenreController genreController = new GenreController(genreRepo, genreView);
+
+        MainController mainController = new MainController(
+                new MainMenuView(),
+                bookController,
+                authorController,
+                publisherController,
+                genreController);
+
+        mainController.start();
     }
 }

@@ -1,16 +1,16 @@
 package com.biblioteca.model;
 
 public class Publisher {
-        private int id;
-        private String name;
+    private int id;
+    private String name;
 
-        public Publisher(String name){
-            this.name=name;
-        }
+    public Publisher(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-        public Publisher(){}
-
-
+    public Publisher() {
+    }
 
     public int getId() {
         return this.id;
