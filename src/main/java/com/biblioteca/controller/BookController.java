@@ -78,17 +78,17 @@ public class BookController {
             System.out.println(colors.GREEN + "4." + colors.RESET + colors.CYAN + " Autores" + colors.RESET);
             System.out.println(colors.GREEN + "5." + colors.RESET + colors.CYAN + " Géneros" + colors.RESET);
             System.out.println(colors.GREEN + "0." + colors.RESET + colors.CYAN + " Guardar y salir" + colors.RESET);
-            int choice = view.askForInt(colors.BG_GREEN + "Seleccione el campo a editar:" + colors.RESET);
+            int choice = view.askForInt(colors.BG_GREEN + "Seleccione el campo a editar:" + colors.RESET + " ");
             switch (choice) {
                 case 1 -> {
-                    String newTitle = view.askForString(colors.CYAN + "Nuevo título:" + colors.RESET);
+                    String newTitle = view.askForString(colors.CYAN + "Nuevo título:" + colors.RESET + " ");
                     if (!newTitle.isBlank())
                         book.setTitle(newTitle);
                     else
                         System.out.println(colors.BG_RED + "El título no puede estar vacío." + colors.RESET);
                 }
                 case 2 -> {
-                    String newIsbn = view.askForString(colors.CYAN + "Nuevo ISBN:" + colors.RESET);
+                    String newIsbn = view.askForString(colors.CYAN + "Nuevo ISBN:" + colors.RESET + " ");
                     if (!newIsbn.isBlank())
                         book.setIsbn(newIsbn);
                     else
@@ -98,7 +98,7 @@ public class BookController {
                     String newDesc;
                     do {
                         newDesc = view
-                                .askForString(colors.CYAN + "Nueva descripción (máx. 200 caracteres):" + colors.RESET);
+                                .askForString(colors.CYAN + "Nueva descripción (máx. 200 caracteres):" + colors.RESET + " ");
                         if (newDesc.isBlank()) {
                             System.out.println(colors.BG_RED + "La descripción no puede estar vacía." + colors.RESET);
                         } else if (newDesc.length() > 200) {

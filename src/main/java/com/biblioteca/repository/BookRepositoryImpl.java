@@ -321,24 +321,24 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findByGenre(String genre) {
         List<Book> books = new ArrayList<>();
-        String sql = """
-                    SELECT
-                        b.id_book,
-                        b.title,
-                        b.isbn,
-                        p.name AS publisher,
-                        STRING_AGG(DISTINCT a.name, ', ') AS authors,
-                        STRING_AGG(DISTINCT g.genre, ', ') AS genres
-                    FROM books b
-                    JOIN publishers p ON b.id_publisher = p.id_publisher
-                    JOIN books_authors ba ON b.id_book = ba.id_book
-                    JOIN authors a ON ba.id_author = a.id_author
-                    JOIN books_genres bg ON b.id_book = bg.id_book
-                    JOIN genres g ON bg.id_genre = g.id_genre
-                    WHERE g.genre ILIKE ?
-                    GROUP BY b.id_book, b.title, b.isbn, p.name
-                    ORDER BY b.title
-                """;
+        String sql= "SELECT b.id_book, b.title, b.isbn, p.name AS publisher, " +
+             "STRING_AGG(DISTINCT a.name, ', ') AS authors, " +
+             "STRING_AGG(DISTINCT g.genre, ', ') AS genres " +
+             "FROM books b " +
+             "JOIN publishers p ON b.id_publisher = p.id_publisher " +
+             "JOIN books_authors ba ON b.id_book = ba.id_book " +
+             "JOIN authors a ON ba.id_author = a.id_author " +
+             "JOIN books_genres bg ON b.id_book = bg.id_book " +
+             "JOIN genres g ON bg.id_genre = g.id_genre " +
+             "WHERE EXISTS ( " +
+             "  SELECT 1 FROM books_genres bg2 " +
+             "  JOIN genres g2 ON bg2.id_genre = g2.id_genre " +
+             "  WHERE bg2.id_book = b.id_book " +
+             "  AND g2.genre ILIKE ? " +
+             ") " +
+             "GROUP BY b.id_book, b.title, b.isbn, p.name " +
+             "ORDER BY b.title";
+
 
         try (Connection connection = DBManager.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)) {

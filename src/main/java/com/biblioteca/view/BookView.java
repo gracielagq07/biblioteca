@@ -1,13 +1,17 @@
 package com.biblioteca.view;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.biblioteca.config.DBManager;
 import com.biblioteca.model.Author;
 import com.biblioteca.model.Book;
 import com.biblioteca.model.Genre;
 import com.biblioteca.model.Publisher;
+import com.biblioteca.repository.BookRepositoryImpl;
 import com.biblioteca.utils.colors;
 
 public class BookView {
@@ -20,34 +24,54 @@ public class BookView {
 
         String title;
         do {
-            System.out.print(colors.BG_CYAN + "Título:" + colors.RESET);
+            System.out.print(colors.BG_CYAN + "Título:" + colors.RESET + " ");
             title = scanner.nextLine().trim();
             if (title.isBlank())
                 System.out.println(colors.BG_YELLOW + "El título no puede estar vacío." + colors.RESET);
         } while (title.isBlank());
         book.setTitle(title);
+String isbn;
 
-        String isbn;
-        String isbnRegex = "^(97[89][- ]?)?\\d{1,5}[- ]?\\d{1,7}[- ]?\\d{1,7}[- ]?[\\dX]$";
-        do {
-            System.out.print(colors.BG_CYAN + "ISBN: " + colors.RESET);
-            isbn = scanner.nextLine().trim();
-            if (isbn.isBlank()) {
-                System.out.println(colors.BG_YELLOW + "El ISBN no puede estar vacío." + colors.RESET);
-                continue;
-            }
-            if (!isbn.matches(isbnRegex)) {
-                System.out.println(colors.BG_RED + "ISBN no válido. Ejemplo válido: 978-84-376-0494-7" + colors.RESET);
-                isbn = "";
-                continue;
-            }
-            isbn = isbn.replaceAll("[- ]", "");
-        } while (isbn.isBlank());
-        book.setIsbn(isbn);
+do {
+    System.out.print(colors.BG_CYAN + "ISBN: " + colors.RESET + " ");
+    isbn = scanner.nextLine().trim();
+
+    if (isbn.isBlank()) {
+        System.out.println(colors.BG_YELLOW + "El ISBN no puede estar vacío." + colors.RESET);
+        continue;
+    }
+
+    // Quitar guiones y espacios
+    isbn = isbn.replaceAll("[- ]", "");
+
+    // Validar longitud
+    if (isbn.length() < 10 || isbn.length() > 13) {
+        System.out.println(colors.BG_RED + "El ISBN debe tener entre 10 y 13 caracteres." + colors.RESET);
+        isbn = "";
+        continue;
+    }
+
+    // ⚡ Verificar si ya existe en BD
+    try (Connection con = DBManager.getConnection()) {
+        BookRepositoryImpl repo = new BookRepositoryImpl();
+        if (repo.bookExistsByIsbn(con, isbn)) {
+            System.out.println(colors.BG_YELLOW + "El ISBN ya está registrado. Ingresa otro." + colors.RESET);
+            isbn = ""; // para que el bucle continue
+        }
+    } catch (SQLException e) {
+        System.out.println(colors.BG_RED + "Error al validar ISBN en la base de datos: " + e.getMessage() + colors.RESET);
+        isbn = ""; // para que el bucle continue
+    }
+
+} while (isbn.isBlank());
+
+book.setIsbn(isbn);
+
+
 
         String description;
         do {
-            System.out.print(colors.BG_CYAN + "Descripción (máx. 200 caracteres):" + colors.RESET);
+            System.out.print(colors.BG_CYAN + "Descripción (máx. 200 caracteres):" + colors.RESET + " ");
             description = scanner.nextLine().trim();
             if (description.isBlank()) {
                 System.out.println(colors.BG_YELLOW + "La descripción no puede estar vacía." + colors.RESET);
@@ -59,13 +83,13 @@ public class BookView {
         } while (description.isBlank());
         book.setDescription(description);
 
-        System.out.print(colors.BG_CYAN + "Editorial:" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "Editorial:" + colors.RESET + " ");
         Publisher publisher = new Publisher();
         publisher.setName(scanner.nextLine().trim());
         book.setPublisher(publisher);
 
         List<Author> authors = new ArrayList<>();
-        System.out.print(colors.BG_CYAN + "Autor(es) (separados por coma):" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "Autor(es) (separados por coma):" + colors.RESET + " ");
         for (String name : scanner.nextLine().split(",")) {
             if (!name.trim().isBlank()) {
                 Author author = new Author();
@@ -76,7 +100,7 @@ public class BookView {
         book.setAuthors(authors);
 
         List<Genre> genres = new ArrayList<>();
-        System.out.print(colors.BG_CYAN + "Género(s) (separados por coma):" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "Género(s) (separados por coma):" + colors.RESET + " ");
         for (String name : scanner.nextLine().split(",")) {
             String trimmed = name.trim();
             if (!trimmed.isBlank()) {
@@ -111,7 +135,7 @@ public class BookView {
 
     public List<Author> askForAuthors() {
         List<Author> authors = new ArrayList<>();
-        System.out.print(colors.BG_CYAN + "Autores (separados por coma):" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "Autores (separados por coma):" + colors.RESET + " ");
         String line = scanner.nextLine();
         for (String name : line.split(",")) {
             name = name.trim();
@@ -126,7 +150,7 @@ public class BookView {
 
     public List<Genre> askForGenres() {
         List<Genre> genres = new ArrayList<>();
-        System.out.print(colors.BG_CYAN + "Géneros (separados por coma):" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "Géneros (separados por coma):" + colors.RESET + " ");
         String line = scanner.nextLine();
         for (String name : line.split(",")) {
             name = name.trim();
@@ -146,14 +170,14 @@ public class BookView {
     }
 
     public int askForBookId() {
-        System.out.print(colors.BG_CYAN + "ID del libro:" + colors.RESET);
+        System.out.print(colors.BG_CYAN + "ID del libro:" + colors.RESET + " ");
         return readInt();
     }
 
     public String askForTitle() {
         String title;
         do {
-            System.out.print(colors.BG_CYAN + "Título a buscar:" + colors.RESET);
+            System.out.print(colors.BG_CYAN + "Título a buscar:" + colors.RESET + " ");
             title = scanner.nextLine().trim();
             if (title.isBlank()) {
                 System.out
@@ -166,7 +190,7 @@ public class BookView {
     public String askForAuthor() {
         String author;
         do {
-            System.out.print(colors.BG_CYAN + "Autor a buscar:" + colors.RESET);
+            System.out.print(colors.BG_CYAN + "Autor a buscar:" + colors.RESET + " ");
             author = scanner.nextLine().trim();
             if (author.isBlank()) {
                 System.out
@@ -179,7 +203,7 @@ public class BookView {
     public String askForGenre() {
         String genre;
         do {
-            System.out.print(colors.BG_CYAN + "Género a buscar: " + colors.RESET);
+            System.out.print(colors.BG_CYAN + "Género a buscar:" + colors.RESET + " ");
             genre = scanner.nextLine().trim();
             if (genre.isBlank()) {
                 System.out
@@ -215,7 +239,7 @@ public class BookView {
                             colors.BLUE + " | Editorial: " + colors.RESET + book.getPublisher().getName() +
                             colors.BLUE + " | Género(s): " + colors.RESET + genres);
             if (showDescription) {
-                output.append(colors.BLUE + " | Descripción: ").append(book.getDescription() + colors.RESET);
+                output.append(colors.BLUE + " | Descripción: " + colors.RESET).append(book.getDescription() );
             }
             System.out.println(output);
         }
@@ -226,7 +250,7 @@ public class BookView {
             try {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.print(colors.BG_CYAN + "Introduce un número válido: " + colors.RESET);
+                System.out.print(colors.BG_CYAN + "Introduce un número válido:" + colors.RESET + " ");
             }
         }
     }
