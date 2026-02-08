@@ -66,7 +66,7 @@ public class BookController {
         int id = view.askForBookId();
         Book book = bookRepository.findById(id);
         if (book == null) {
-            System.out.println(colors.BG_YELLOW + "No se encontró el libro con ID " + colors.RESET + id);
+            System.out.println(colors.BG_YELLOW + "No se encontró el libro con ID " + colors.RESET + id + " ");
             return;
         }
         boolean editing = true;
