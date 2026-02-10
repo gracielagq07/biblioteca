@@ -1,12 +1,12 @@
 package com.biblioteca.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -17,7 +17,7 @@ public class BookRepositoryTest {
     @Mock
     private BookRepository bookRepository;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }

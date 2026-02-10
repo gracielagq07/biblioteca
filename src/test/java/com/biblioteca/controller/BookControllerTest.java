@@ -4,20 +4,17 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.biblioteca.model.Book;
 import com.biblioteca.repository.BookRepository;
 import com.biblioteca.view.BookMenuView;
 import com.biblioteca.view.BookView;
 
-@ExtendWith(MockitoExtension.class)
 public class BookControllerTest {
 
     @Mock
@@ -32,7 +29,7 @@ public class BookControllerTest {
     @InjectMocks
     private BookController controller;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
