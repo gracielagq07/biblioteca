@@ -5,30 +5,36 @@ import com.biblioteca.model.Book;
 import com.biblioteca.model.Publisher;
 import com.biblioteca.model.Genre;
 import com.biblioteca.config.DBManager;
-import org.junit.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
 import java.util.List;
 
-import static org.junit.Assert.*;
 
 public class BookRepositoryImplTest {
 
-    private static BookRepositoryImpl repo;
+    private static BookRepository repo;
     private Connection testCon;
 
-    @BeforeClass
+    @BeforeEach
     public static void setupClass() throws Exception {
         repo = new BookRepositoryImpl();
     }
 
-    @Before
+    @BeforeEach
     public void setupTest() throws Exception {
         testCon = DBManager.getConnection();
         testCon.setAutoCommit(false);
     }
 
-    @After
+    @AfterAll
     public void cleanupTest() throws Exception {
         testCon.rollback();
         testCon.close();
@@ -62,7 +68,7 @@ public class BookRepositoryImplTest {
         repo.addBook(book);
 
         List<Book> findThem = repo.findByTitle(book.getTitle());
-        assertFalse("El libro debería encontrarse", findThem.isEmpty());
+        assertFalse(findThem.isEmpty(), "El libro debería encontrarse" );
 
         Book find = findThem.get(0);
         assertEquals(isbn, find.getIsbn());
@@ -94,8 +100,7 @@ public class BookRepositoryImplTest {
         book.setGenres(List.of(genre));
 
         repo.addBook(book);
-        assertTrue("El ISBN debería existir en la base de datos",
-                   repo.bookExistsByIsbn(testCon, isbn));
+        assertTrue(repo.bookExistsByIsbn(testCon, isbn), "El ISBN debería existir en la base de datos");
     }
 
     @Test
@@ -128,6 +133,6 @@ public class BookRepositoryImplTest {
         repo.deleteById(inserted.getId());
 
         Book finded = repo.findById(inserted.getId());
-        assertNull("El libro debería haber sido eliminado", finded);
+        assertNull(finded, "El libro debería haber sido eliminado");
     }
 }
