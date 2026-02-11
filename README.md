@@ -27,9 +27,7 @@ The application allows the user to create, update, delete, view, and search book
 
 ---
 
-## Screenshot
-***
-> Add screenshots of your terminal menu and example flows (e.g., listing books, searching by title, adding a book).
+## Screenshots
 
 ### Terminal Menu
 ![Terminal Main Menu](./src/main/java/com/biblioteca/assets/screenshots/main_menu.jpg)
@@ -45,7 +43,6 @@ The application allows the user to create, update, delete, view, and search book
 ---
 
 ## Technologies
-***
 - Java 21  
 - PostgreSQL  
 - Maven  
@@ -72,19 +69,19 @@ Build the project using Maven:
 ```bash
 mvn clean install
 ```
+---
 
-Usage
+## Usage
 Run the application and interact through the terminal menu.
 You can:
-
-View the full list of books
-Add new books to the database
-Edit existing book information
-Delete books
-Search books by title
-Search books by author
-Search books by literary genre
-The menu guides the user through each action, clearly indicating the available options and required inputs.
+- View the full list of books
+- Add new books to the database
+- Edit existing book information
+- Delete books
+- Search books by title
+- Search books by author
+- Search books by literary genre
+- The menu guides the user through each action, clearly indicating the available options and required inputs.
 
 
 ## Project Status
@@ -97,22 +94,22 @@ Suggestions, improvements, and feedback are welcome for educational purposes.
 
 ## FAQs
 1. **Is this project finished?**
-✅Yes, the project is complete and fulfills all the defined requirements.
+Yes, the project is complete and fulfills all the defined requirements.
 
 2. **Can this project be used by other people?**
-✅Yes, the project was developed for educational purposes and can be reused or extended for learning.
+Yes, the project was developed for educational purposes and can be reused or extended for learning.
 
 3. **Does the application have a graphical interface?**
-❌No, the application is entirely terminal-based.
+No, the application is entirely terminal-based.
 
 4. **Is there user authentication or permissions management?**
-❌No, user authentication is not implemented in this project, only required for the connection of the DB.
+No, user authentication is not implemented in this project, only required for the connection of the DB.
 
 5. **Was this project developed individually or in a team?**
 This project was developed as a group project.
 
 6. **Is the database normalized?**
-✅Yes, the database design is normalized up to the Third Normal Form (3NF).
+Yes, the database design is normalized up to the Third Normal Form (3NF).
 
 7. **Does the project include automated tests?**
-✅Yes, the project includes unit tests implemented using JUnit, Mockito and Integration Tests.
+Yes, the project includes unit tests implemented using JUnit, Mockito and Integration Tests.
