@@ -30,44 +30,40 @@ public class BookView {
                 System.out.println(colors.BG_YELLOW + "El título no puede estar vacío." + colors.RESET);
         } while (title.isBlank());
         book.setTitle(title);
-String isbn;
+        String isbn;
 
-do {
-    System.out.print(colors.BG_CYAN + "ISBN: " + colors.RESET + " ");
-    isbn = scanner.nextLine().trim();
+        do {
+            System.out.print(colors.BG_CYAN + "ISBN: " + colors.RESET + " ");
+            isbn = scanner.nextLine().trim();
 
-    if (isbn.isBlank()) {
-        System.out.println(colors.BG_YELLOW + "El ISBN no puede estar vacío." + colors.RESET);
-        continue;
-    }
+            if (isbn.isBlank()) {
+                System.out.println(colors.BG_YELLOW + "El ISBN no puede estar vacío." + colors.RESET);
+                continue;
+            }
 
-    // Quitar guiones y espacios
-    isbn = isbn.replaceAll("[- ]", "");
+            isbn = isbn.replaceAll("[- ]", "");
 
-    // Validar longitud
-    if (isbn.length() < 10 || isbn.length() > 13) {
-        System.out.println(colors.BG_RED + "El ISBN debe tener entre 10 y 13 caracteres." + colors.RESET);
-        isbn = "";
-        continue;
-    }
+            if (isbn.length() < 10 || isbn.length() > 13) {
+                System.out.println(colors.BG_RED + "El ISBN debe tener entre 10 y 13 caracteres." + colors.RESET);
+                isbn = "";
+                continue;
+            }
 
-    // ⚡ Verificar si ya existe en BD
-    try (Connection con = DBManager.getConnection()) {
-        BookRepositoryImpl repo = new BookRepositoryImpl();
-        if (repo.bookExistsByIsbn(con, isbn)) {
-            System.out.println(colors.BG_YELLOW + "El ISBN ya está registrado. Ingresa otro." + colors.RESET);
-            isbn = ""; // para que el bucle continue
-        }
-    } catch (SQLException e) {
-        System.out.println(colors.BG_RED + "Error al validar ISBN en la base de datos: " + e.getMessage() + colors.RESET);
-        isbn = ""; // para que el bucle continue
-    }
+            try (Connection con = DBManager.getConnection()) {
+                BookRepositoryImpl repo = new BookRepositoryImpl();
+                if (repo.bookExistsByIsbn(con, isbn)) {
+                    System.out.println(colors.BG_YELLOW + "El ISBN ya está registrado. Ingresa otro." + colors.RESET);
+                    isbn = "";
+                }
+            } catch (SQLException e) {
+                System.out.println(
+                        colors.BG_RED + "Error al validar ISBN en la base de datos: " + e.getMessage() + colors.RESET);
+                isbn = "";
+            }
 
-} while (isbn.isBlank());
+        } while (isbn.isBlank());
 
-book.setIsbn(isbn);
-
-
+        book.setIsbn(isbn);
 
         String description;
         do {
@@ -233,13 +229,13 @@ book.setIsbn(isbn);
                     .orElse("");
             StringBuilder output = new StringBuilder(
                     colors.BLUE + "ID: " + colors.RESET + book.getId() +
-                            colors.BLUE + " | Título: " + colors.RESET + book.getTitle() +
-                            colors.BLUE + " | ISBN: " + colors.RESET + book.getIsbn() +
-                            colors.BLUE + " | Autor(es): " + colors.RESET + authors +
-                            colors.BLUE + " | Editorial: " + colors.RESET + book.getPublisher().getName() +
-                            colors.BLUE + " | Género(s): " + colors.RESET + genres);
+                            colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " Título: " + colors.RESET + book.getTitle() +
+                            colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " ISBN: " + colors.RESET + book.getIsbn() +
+                            colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " Autor(es): " + colors.RESET + authors +
+                            colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " Editorial: " + colors.RESET + book.getPublisher().getName() +
+                            colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " Género(s): " + colors.RESET + genres);
             if (showDescription) {
-                output.append(colors.BLUE + " | Descripción: " + colors.RESET).append(book.getDescription() );
+                output.append(colors.MAGENTA + " | " + colors.RESET + colors.BLUE + " Descripción: " + colors.RESET).append(book.getDescription());
             }
             System.out.println(output);
         }
